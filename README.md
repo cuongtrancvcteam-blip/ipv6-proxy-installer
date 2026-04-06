@@ -30,7 +30,7 @@ curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-in
 - prints a direct download link
 - opens the needed UFW ports automatically if UFW is active
 - builds and runs a fixed `3proxy` release with `systemd`
-- runs an automatic self-check on 10 random proxy ports
+- waits until all listeners are up, then tests 10 random proxy ports
 
 ## Default Output
 
@@ -70,7 +70,7 @@ Explanation:
 
 ## Quick Test
 
-The installer now automatically tests 10 random proxy ports and prints `PASS` or `FAIL`.
+The installer now waits for the full listener count, tests 10 random proxy ports, and prints `Installer status: READY` only if those checks pass.
 
 ## Notes
 

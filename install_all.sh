@@ -163,4 +163,9 @@ echo "Preview:"
 head -n 5 "$PROXY_EXPORT_PATH" || true
 echo
 echo "Self-check:"
-bash "${SCRIPT_DIR}/self_check_proxies.sh" "${CONFIG_ABS}" || true
+if bash "${SCRIPT_DIR}/self_check_proxies.sh" "${CONFIG_ABS}"; then
+  echo "Installer status: READY"
+else
+  echo "Installer status: FAIL"
+  exit 1
+fi
