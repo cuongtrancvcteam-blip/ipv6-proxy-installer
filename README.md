@@ -66,6 +66,16 @@ Explanation:
 - that default is a balance between quantity and reliability
 - if you want more, set `COUNT` to a higher number
 
+## Quick Test
+
+After install, test the first 3 proxies like this:
+
+```bash
+for port in 30000 30001 30002; do echo -n "$port -> "; curl -sS --max-time 10 -x http://YOUR_USER:YOUR_PASS@127.0.0.1:$port http://api64.ipify.org; echo; done
+```
+
+If everything works, each port should return a different IPv6.
+
 ## Notes
 
 - This works only if the VPS really has a routed IPv6 `/64`

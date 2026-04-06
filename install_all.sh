@@ -130,6 +130,7 @@ ExecStart=${THREEPROXY_BIN} ${PROXY_CFG_PATH}
 ExecReload=/bin/kill -HUP \$MAINPID
 Restart=always
 RestartSec=2
+LimitNOFILE=65535
 
 [Install]
 WantedBy=multi-user.target

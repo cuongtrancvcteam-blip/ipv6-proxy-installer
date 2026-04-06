@@ -40,31 +40,34 @@ if [[ -z "$ENDPOINT_HOST" ]]; then
 fi
 
 {
-  echo "daemon"
-  echo "maxconn 4000"
+  echo "maxconn 100"
   echo "nserver 1.1.1.1"
   echo "nserver 2606:4700:4700::1111"
   echo "nscache 65536"
+  echo "nscache6 65536"
   echo "timeouts 1 5 30 60 180 1800 15 60"
   echo "setgid 65535"
   echo "setuid 65535"
   echo "stacksize 6291456"
-  echo "flush"
-  echo "auth strong"
   echo "users ${PROXY_LOGIN}:CL:${PROXY_PASSWORD}"
-  echo "allow ${PROXY_LOGIN}"
 } >"$PROXY_CFG_PATH"
 
 port="$START_PORT"
 >"$PROXY_EXPORT_PATH"
+first_entry=1
 
 while IFS= read -r ipv6; do
   {
+    if [[ "$first_entry" -eq 0 ]]; then
+      echo "flush"
+    fi
+    echo "auth strong"
+    echo "allow ${PROXY_LOGIN}"
     echo "proxy -6 -n -a -p${port} -i${PROXY_LISTEN_IPV4} -e${ipv6}"
-    echo "flush"
   } >>"$PROXY_CFG_PATH"
 
   echo "${ENDPOINT_HOST}:${port}:${PROXY_LOGIN}:${PROXY_PASSWORD}" >>"$PROXY_EXPORT_PATH"
+  first_entry=0
   ((port+=1))
 done <"$ADDR_LIST_FILE"
 
