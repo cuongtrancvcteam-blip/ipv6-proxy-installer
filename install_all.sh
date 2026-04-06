@@ -115,6 +115,7 @@ Restart=always
 RestartSec=2
 LimitNOFILE=999999
 LimitNPROC=999999
+TasksMax=infinity
 
 [Install]
 WantedBy=multi-user.target

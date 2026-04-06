@@ -31,7 +31,7 @@ while IFS=: read -r host port user pass; do
   [[ -n "$host" && -n "$port" && -n "$user" && -n "$pass" ]] || continue
 
   output="$(curl -sS --max-time "$TIMEOUT_SECONDS" -x "http://${user}:${pass}@127.0.0.1:${port}" http://api64.ipify.org 2>&1 || true)"
-  if [[ "$output" == *:* ]]; then
+  if [[ "$output" =~ ^[0-9a-fA-F:]+$ && "$output" == *:* ]]; then
     echo "${port} -> OK -> ${output}"
     ((pass_count+=1))
   else
