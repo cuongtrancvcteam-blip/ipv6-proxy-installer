@@ -22,7 +22,62 @@ CONFIG_ABS="$(cd "$(dirname "$CONFIG_PATH")" && pwd)/$(basename "$CONFIG_PATH")"
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
-apt-get install -y python3 iproute2 3proxy curl tar
+apt-get install -y python3 iproute2 curl tar
+
+install_3proxy() {
+  if command -v 3proxy >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if apt-get install -y 3proxy; then
+    return 0
+  fi
+
+  echo "3proxy is not available in the default apt repositories. Falling back to the official GitHub release..."
+
+  apt-get install -y ca-certificates
+
+  local arch
+  local asset_suffix
+  local release_api
+  local asset_url
+  local deb_path
+
+  arch="$(dpkg --print-architecture)"
+  case "$arch" in
+    amd64)
+      asset_suffix=".x86_64.deb"
+      ;;
+    arm64)
+      asset_suffix=".aarch64.deb"
+      ;;
+    armhf|arm)
+      asset_suffix=".arm.deb"
+      ;;
+    *)
+      echo "Unsupported architecture for automatic 3proxy install: $arch" >&2
+      exit 1
+      ;;
+  esac
+
+  release_api="https://api.github.com/repos/3proxy/3proxy/releases/latest"
+  asset_url="$(
+    curl -fsSL "$release_api" \
+      | python3 -c "import json,sys; data=json.load(sys.stdin); suffix=sys.argv[1]; urls=[a['browser_download_url'] for a in data.get('assets', []) if a.get('name','').endswith(suffix)]; print(urls[0] if urls else '')" \
+        "$asset_suffix"
+  )"
+
+  if [[ -z "$asset_url" ]]; then
+    echo "Could not find a matching 3proxy release asset for $arch" >&2
+    exit 1
+  fi
+
+  deb_path="/tmp/3proxy_latest_${arch}.deb"
+  curl -fsSL "$asset_url" -o "$deb_path"
+  dpkg -i "$deb_path" || apt-get install -fy
+}
+
+install_3proxy
 
 bash "${SCRIPT_DIR}/add_ipv6_pool.sh" "${CONFIG_ABS}"
 bash "${SCRIPT_DIR}/install_boot_service.sh" "${CONFIG_ABS}"
