@@ -84,6 +84,36 @@ bash "${SCRIPT_DIR}/install_boot_service.sh" "${CONFIG_ABS}"
 bash "${SCRIPT_DIR}/generate_3proxy_cfg.sh" "${CONFIG_ABS}"
 bash "${SCRIPT_DIR}/setup_download_link.sh" "${CONFIG_ABS}"
 
+open_firewall_ports() {
+  if ! command -v ufw >/dev/null 2>&1; then
+    echo "UFW not found. Skipping automatic firewall rules."
+    return 0
+  fi
+
+  local ufw_status
+  ufw_status="$(ufw status 2>/dev/null || true)"
+  if [[ "$ufw_status" != Status:\ active* ]]; then
+    echo "UFW is not active. Skipping automatic firewall rules."
+    return 0
+  fi
+
+  local end_port
+  end_port=$((START_PORT + COUNT - 1))
+
+  if [[ "${ENABLE_HTTP_SHARE:-yes}" == "yes" ]]; then
+    ufw allow "${SHARE_PORT}/tcp"
+  fi
+  ufw allow "${START_PORT}:${end_port}/tcp"
+  ufw reload
+
+  echo "Opened UFW ports : ${START_PORT}-${end_port}/tcp"
+  if [[ "${ENABLE_HTTP_SHARE:-yes}" == "yes" ]]; then
+    echo "Opened UFW share : ${SHARE_PORT}/tcp"
+  fi
+}
+
+open_firewall_ports
+
 THREEPROXY_BIN="$(command -v 3proxy)"
 THREEPROXY_SERVICE="/etc/systemd/system/3proxy-vultr-ipv6.service"
 

@@ -28,6 +28,7 @@ curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-in
 - creates `2000` proxies by default
 - exports a txt file
 - prints a direct download link
+- opens the needed UFW ports automatically if UFW is active
 
 ## Default Output
 
