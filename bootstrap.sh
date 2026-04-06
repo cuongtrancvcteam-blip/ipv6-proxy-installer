@@ -6,19 +6,10 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-PACK_URL="${PACK_URL:-}"
+DEFAULT_PACK_URL="https://github.com/cuongtrancvcteam-blip/ipv6-proxy-installer/archive/refs/heads/main.tar.gz"
+PACK_URL="${PACK_URL:-$DEFAULT_PACK_URL}"
 INSTALL_DIR="${INSTALL_DIR:-/root/vultr_ipv6}"
 TMP_TARBALL="/tmp/vultr_ipv6_pack.tar.gz"
-
-if [[ -z "$PACK_URL" ]]; then
-  cat >&2 <<'EOF'
-Missing PACK_URL.
-
-Example:
-  curl -fsSL https://your-host.example.com/bootstrap.sh | sudo PACK_URL=https://your-host.example.com/vultr_ipv6.tar.gz bash
-EOF
-  exit 1
-fi
 
 apt-get update
 apt-get install -y curl tar

@@ -108,7 +108,15 @@ If you want to paste one command into a fresh VPS, host:
 Then run:
 
 ```bash
-curl -fsSL https://your-host.example.com/bootstrap.sh | sudo PACK_URL=https://your-host.example.com/vultr_ipv6.tar.gz bash
+curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-installer/main/bootstrap.sh | sudo bash
+```
+
+That is the shortest command for this repo because `bootstrap.sh` already knows the GitHub tarball URL.
+
+You can still override the tarball source manually if needed:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-installer/main/bootstrap.sh | sudo PACK_URL=https://your-host.example.com/vultr_ipv6.tar.gz bash
 ```
 
 This does not require GitHub specifically. Any reachable URL works.
@@ -130,7 +138,7 @@ GitHub easiest pattern:
 Example:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/bootstrap.sh | sudo PACK_URL=https://github.com/YOUR_USER/YOUR_REPO/archive/refs/heads/main.tar.gz bash
+curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-installer/main/bootstrap.sh | sudo bash
 ```
 
 That command now defaults to zero-input mode.
@@ -138,7 +146,7 @@ That command now defaults to zero-input mode.
 If you want the old prompt-based mode:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/bootstrap.sh | sudo INSTALL_MODE=interactive PACK_URL=https://github.com/YOUR_USER/YOUR_REPO/archive/refs/heads/main.tar.gz bash
+curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-installer/main/bootstrap.sh | sudo INSTALL_MODE=interactive bash
 ```
 
 ## Direct download link after install
