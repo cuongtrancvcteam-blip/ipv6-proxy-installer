@@ -29,6 +29,8 @@ curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-in
 - exports a txt file
 - prints a direct download link
 - opens the needed UFW ports automatically if UFW is active
+- builds and runs a fixed `3proxy` release with `systemd`
+- runs an automatic self-check on 10 random proxy ports
 
 ## Default Output
 
@@ -68,13 +70,7 @@ Explanation:
 
 ## Quick Test
 
-After install, test the first 3 proxies like this:
-
-```bash
-for port in 30000 30001 30002; do echo -n "$port -> "; curl -sS --max-time 10 -x http://YOUR_USER:YOUR_PASS@127.0.0.1:$port http://api64.ipify.org; echo; done
-```
-
-If everything works, each port should return a different IPv6.
+The installer now automatically tests 10 random proxy ports and prints `PASS` or `FAIL`.
 
 ## Notes
 
