@@ -16,6 +16,8 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 if [[ "${ENABLE_HTTP_SHARE:-yes}" != "yes" ]]; then
   echo "HTTP sharing is disabled in config."
   exit 0
@@ -39,7 +41,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 -m http.server ${SHARE_PORT} --bind 0.0.0.0 --directory ${SHARE_DIR}
+ExecStart=/usr/bin/python3 ${SCRIPT_DIR}/serve_download.py --host 0.0.0.0 --port ${SHARE_PORT} --directory ${SHARE_DIR}
 Restart=always
 RestartSec=2
 

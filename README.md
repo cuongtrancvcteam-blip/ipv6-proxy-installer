@@ -50,6 +50,8 @@ The download link usually looks like:
 http://YOUR_VPS_IPV4:8080/proxy_endpoints.txt
 ```
 
+That link now forces a `.txt` download in the browser instead of just opening the text in a tab.
+
 ## If You Want More Proxies
 
 Run this command and replace `3000` with the number you want:
