@@ -18,6 +18,23 @@ fi
 
 SAMPLE_SIZE="${SELF_CHECK_SAMPLE_SIZE:-10}"
 TIMEOUT_SECONDS="${SELF_CHECK_TIMEOUT_SECONDS:-10}"
+STARTUP_TIMEOUT_SECONDS="${SELF_CHECK_STARTUP_TIMEOUT_SECONDS:-60}"
+
+expected_listeners=0
+if [[ -f "${PROXY_CFG_PATH:-}" ]]; then
+  expected_listeners="$(grep -c '^proxy ' "$PROXY_CFG_PATH" || true)"
+fi
+
+if [[ "$expected_listeners" -gt 0 ]]; then
+  deadline=$((SECONDS + STARTUP_TIMEOUT_SECONDS))
+  while (( SECONDS < deadline )); do
+    current_listeners="$(ss -ltnp 2>/dev/null | grep -c 3proxy || true)"
+    if [[ "$current_listeners" -ge "$expected_listeners" ]]; then
+      break
+    fi
+    sleep 1
+  done
+fi
 
 tmp_sample="$(mktemp)"
 trap 'rm -f "$tmp_sample"' EXIT
