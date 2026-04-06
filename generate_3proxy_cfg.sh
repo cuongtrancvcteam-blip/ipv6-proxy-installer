@@ -25,6 +25,20 @@ fi
 mkdir -p "$(dirname "$PROXY_CFG_PATH")"
 mkdir -p "$(dirname "$PROXY_EXPORT_PATH")"
 
+detect_ipv4() {
+  ip route get 1.1.1.1 2>/dev/null | awk '{for (i=1;i<=NF;i++) if ($i=="src") {print $(i+1); exit}}'
+}
+
+ENDPOINT_HOST="${PUBLIC_ENDPOINT_HOST:-}"
+if [[ -z "$ENDPOINT_HOST" ]]; then
+  ENDPOINT_HOST="$(detect_ipv4 || true)"
+fi
+
+if [[ -z "$ENDPOINT_HOST" ]]; then
+  echo "Could not detect the public IPv4 host for exported proxies." >&2
+  exit 1
+fi
+
 {
   echo "daemon"
   echo "maxconn 4000"
@@ -50,7 +64,7 @@ while IFS= read -r ipv6; do
     echo "flush"
   } >>"$PROXY_CFG_PATH"
 
-  echo "${ipv6}:${port}:${PROXY_LOGIN}:${PROXY_PASSWORD}" >>"$PROXY_EXPORT_PATH"
+  echo "${ENDPOINT_HOST}:${port}:${PROXY_LOGIN}:${PROXY_PASSWORD}" >>"$PROXY_EXPORT_PATH"
   ((port+=1))
 done <"$ADDR_LIST_FILE"
 

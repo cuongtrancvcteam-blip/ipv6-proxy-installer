@@ -133,6 +133,9 @@ echo "3proxy config  : $PROXY_CFG_PATH"
 echo "Proxy text file: $PROXY_EXPORT_PATH"
 echo "Proxy username : $PROXY_LOGIN"
 echo "Proxy password : $PROXY_PASSWORD"
+if [[ -n "${PUBLIC_ENDPOINT_HOST:-}" ]]; then
+  echo "Proxy host     : $PUBLIC_ENDPOINT_HOST"
+fi
 if [[ -n "${DOWNLOAD_EXPORT_PATH:-}" ]]; then
   echo "Download copy  : $DOWNLOAD_EXPORT_PATH"
 fi

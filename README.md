@@ -1,58 +1,69 @@
 # IPv6 Proxy Installer
 
-## Dung Cho Cai Gi
+## Requirements
 
-- VPS co routed IPv6 `/64`
-- Dung duoc cho nhieu nha cung cap, khong chi rieng Vultr
-- OS khuyen dung: `Ubuntu 22.04 x64`
+- Any VPS with a routed IPv6 `/64`
+- Not limited to Vultr
+- Recommended OS: `Ubuntu 22.04 x64`
 
-## Truoc Khi Chay
+## Before You Run It
 
-1. Tao VPS `Ubuntu 22.04`
-2. Bat hoac gan IPv6 network cho VPS trong panel cua nha cung cap
-3. Dam bao VPS co routed IPv6 `/64`
+1. Create a VPS with `Ubuntu 22.04`
+2. Enable or assign IPv6 in your provider panel
+3. Make sure the VPS has a routed IPv6 `/64`
 
-## Lenh Mac Dinh
+## Default Command
 
-SSH vao VPS roi chay:
+SSH into the VPS and run:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-installer/main/bootstrap.sh | sudo bash
 ```
 
-## No Se Tu Lam
+## What The Default Command Does
 
-- tu detect interface
-- tu detect IPv6 `/64`
-- tu random `user`
-- tu random `pass`
-- tu tao `2000` proxy mac dinh
-- tu tao file txt
-- tu in link tai file
+- auto-detects the main network interface
+- auto-detects the routed IPv6 `/64`
+- generates a random proxy username and password
+- creates `2000` proxies by default
+- exports a txt file
+- prints a direct download link
 
-## Ket Qua
+## Default Output
 
-Sau khi chay xong, no se in ra:
+After it finishes, it prints:
 
 - `Proxy username`
 - `Proxy password`
 - `Download URL`
 
-Link tai thuong dang:
+The txt file format is:
 
 ```text
-http://IP_VPS:8080/proxy_endpoints.txt
+ipv4_of_vps:port:user:pass
 ```
 
-File txt co dang:
+The download link usually looks like:
 
 ```text
-ipv6:port:user:pass
+http://YOUR_VPS_IPV4:8080/proxy_endpoints.txt
 ```
 
-## Luu Y
+## If You Want More Proxies
 
-- Chi can VPS co routed IPv6 `/64` la dung duoc
-- Vultr chi la mot vi du, khong phai dieu kien bat buoc
-- Neu VPS khong co IPv6 `/64` thi script khong chay duoc
-- Mac dinh hien tai la `2000` proxy
+Run this command and replace `3000` with the number you want:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/cuongtrancvcteam-blip/ipv6-proxy-installer/main/bootstrap.sh | sudo COUNT=3000 bash
+```
+
+Explanation:
+
+- the default command keeps `2000` proxies
+- that default is a balance between quantity and reliability
+- if you want more, set `COUNT` to a higher number
+
+## Notes
+
+- This works only if the VPS really has a routed IPv6 `/64`
+- If the provider gives only one IPv6 or a `/128`, this will not work

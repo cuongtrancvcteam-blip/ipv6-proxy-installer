@@ -19,6 +19,7 @@ START_PORT=30000
 PROXY_LOGIN="proxyuser"
 PROXY_PASSWORD="changeme"
 PROXY_LISTEN_IPV4="0.0.0.0"
+PUBLIC_ENDPOINT_HOST=""
 PROXY_CFG_PATH="/etc/3proxy/3proxy.cfg"
 PROXY_EXPORT_PATH="${STATE_DIR}/proxy_endpoints.txt"
 DOWNLOAD_EXPORT_PATH="/root/proxy_endpoints.txt"

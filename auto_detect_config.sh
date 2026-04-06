@@ -124,6 +124,7 @@ PY
 )}"
 PROXY_PASSWORD_VALUE="${PROXY_PASSWORD:-$(random_string 16)}"
 PROXY_LISTEN_IPV4_VALUE="${PROXY_LISTEN_IPV4:-0.0.0.0}"
+PUBLIC_ENDPOINT_HOST_VALUE="${PUBLIC_ENDPOINT_HOST:-$(ip -o route get 1.1.1.1 2>/dev/null | awk '{for (i=1;i<=NF;i++) if ($i=="src") {print $(i+1); exit}}')}"
 STATE_DIR_VALUE="${STATE_DIR:-/var/lib/vultr-ipv6-pool}"
 ADDR_LIST_FILE_VALUE="${ADDR_LIST_FILE:-${STATE_DIR_VALUE}/ipv6_pool.txt}"
 PROXY_CFG_PATH_VALUE="${PROXY_CFG_PATH:-/etc/3proxy/3proxy.cfg}"
@@ -146,6 +147,7 @@ sed \
   -e "s|^PROXY_LOGIN=.*|PROXY_LOGIN=\"$(escape_sed "$PROXY_LOGIN_VALUE")\"|" \
   -e "s|^PROXY_PASSWORD=.*|PROXY_PASSWORD=\"$(escape_sed "$PROXY_PASSWORD_VALUE")\"|" \
   -e "s|^PROXY_LISTEN_IPV4=.*|PROXY_LISTEN_IPV4=\"$(escape_sed "$PROXY_LISTEN_IPV4_VALUE")\"|" \
+  -e "s|^PUBLIC_ENDPOINT_HOST=.*|PUBLIC_ENDPOINT_HOST=\"$(escape_sed "$PUBLIC_ENDPOINT_HOST_VALUE")\"|" \
   -e "s|^PROXY_CFG_PATH=.*|PROXY_CFG_PATH=\"$(escape_sed "$PROXY_CFG_PATH_VALUE")\"|" \
   -e "s|^PROXY_EXPORT_PATH=.*|PROXY_EXPORT_PATH=\"$(escape_sed "$PROXY_EXPORT_PATH_VALUE")\"|" \
   -e "s|^DOWNLOAD_EXPORT_PATH=.*|DOWNLOAD_EXPORT_PATH=\"$(escape_sed "$DOWNLOAD_EXPORT_PATH_VALUE")\"|" \
@@ -161,3 +163,4 @@ echo "Primary IPv6     : $PRIMARY_IPV6_VALUE"
 echo "Routed subnet    : $IPV6_SUBNET_VALUE"
 echo "Proxy username   : $PROXY_LOGIN_VALUE"
 echo "Proxy password   : $PROXY_PASSWORD_VALUE"
+echo "Proxy host       : $PUBLIC_ENDPOINT_HOST_VALUE"
