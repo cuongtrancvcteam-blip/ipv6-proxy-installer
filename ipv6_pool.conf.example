@@ -1,0 +1,30 @@
+# Copy this file to ipv6_pool.conf and edit the values for your VPS.
+
+INTERFACE="eth0"
+IPV6_SUBNET="2001:19f0:1234:5678::/64"
+PRIMARY_IPV6=""
+
+# How many extra IPv6 addresses to generate from the /64.
+COUNT=2000
+
+# Seed used for deterministic address generation.
+RANDOM_SEED="replace-me"
+
+# Where generated state will be stored on the VPS.
+STATE_DIR="/var/lib/vultr-ipv6-pool"
+ADDR_LIST_FILE="${STATE_DIR}/ipv6_pool.txt"
+
+# 3proxy-related settings.
+START_PORT=30000
+PROXY_LOGIN="proxyuser"
+PROXY_PASSWORD="changeme"
+PROXY_LISTEN_IPV4="0.0.0.0"
+PROXY_CFG_PATH="/etc/3proxy/3proxy.cfg"
+PROXY_EXPORT_PATH="${STATE_DIR}/proxy_endpoints.txt"
+DOWNLOAD_EXPORT_PATH="/root/proxy_endpoints.txt"
+
+# Optional simple HTTP sharing for the exported proxy file.
+ENABLE_HTTP_SHARE="yes"
+SHARE_PORT=8080
+SHARE_DIR="/opt/vultr-ipv6-share"
+SHARE_FILE_NAME="proxy_endpoints.txt"
